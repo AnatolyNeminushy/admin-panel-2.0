@@ -227,6 +227,6 @@ docker compose exec backend node utils/make-hash.js <ваш-пароль>
 
 ## Лицензия
 
-Проект распространяется по лицензии MIT — см. файл `LICENSE`.
+Проект распространяется по лицензии MIT — см. файл [`LICENSE`](LICENCE).
 
 ---
