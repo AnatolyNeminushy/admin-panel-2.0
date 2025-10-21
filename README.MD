@@ -83,7 +83,7 @@
 - ### База данных
   ![База данных](frontend/docs/screenshots/database.png)
 - ### Рассылки
-  ![Рассылки](frontend/docs/screenshots/mailing.png)
+  ![Рассылки](frontend/docs/screenshots/mail.png)
 
 ---
 
