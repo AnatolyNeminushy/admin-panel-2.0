@@ -1,0 +1,61 @@
+﻿services:
+  db:
+    image: postgres:16-alpine
+    container_name: local_pg
+    environment:
+      POSTGRES_DB: dev_db
+      POSTGRES_USER: dev_user
+      POSTGRES_PASSWORD: dev_password
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./backend/db/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dev_user -d dev_db"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: adminpanel_backend
+    env_file:
+      - ./backend/.env.example
+    environment:
+      - DATABASE_URL=postgres://dev_user:dev_password@db:5432/dev_db
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "5000:5000"
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          'node -e "fetch(''http://localhost:5000/api/health/db'').then(()=>process.exit(0)).catch(()=>process.exit(1))"',
+        ]
+      interval: 10s
+      timeout: 3s
+      retries: 12
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+      args:
+        # Фронт будет ходить на /api, а nginx внутри контейнера
+        # проксирует /api → backend:5000
+
+        VITE_API_URL: /api
+    container_name: adminpanel_frontend
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "3000:80"
+
+volumes:
+  pgdata:

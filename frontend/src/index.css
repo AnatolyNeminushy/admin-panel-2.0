@@ -1,0 +1,241 @@
+/* 0) Шрифты/импорты */
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap");
+
+/* 1) tailwind слои */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 2) BASE — глобальные дефолты (html/body/теги/тема) */
+@layer base {
+  :root {
+    font-family: "Montserrat", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      Oxygen, Ubuntu, sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
+
+    color-scheme: light dark;
+    color: rgba(255, 255, 255, 0.87);
+    background-color: #242424;
+
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  /* управляем скроллом приложением, а не body */
+  body {
+    margin: 0;
+    min-width: 320px;
+    min-height: 100vh;
+    overflow: hidden;
+  }
+
+  /* типографика демо + ссылки/кнопки как базовые теги */
+  h1 {
+    font-size: 3.2em;
+    line-height: 1.1;
+  }
+
+  a {
+    font-weight: 500;
+    color: #646cff;
+    text-decoration: none;
+  }
+  a:hover {
+    color: #535bf2;
+  }
+
+  
+  
+  
+}
+
+/* 3) COMPONENTS — переиспользуемые составные классы */
+@layer components {
+  /* твоя "панель верхнего уровня" */
+  .metric-card {
+    @apply bg-[#62677B]/40 rounded-3xl  p-4 lg:pl-6  flex items-stretch overflow-hidden backdrop-blur-xl;
+    box-shadow: inset 0 0 12px 0 #ffffff42; /* кастомный инсет вне @apply */
+    --mc-border-w: 1px; /* толщина «бордера» */
+  }
+
+  .metric-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: var(--mc-border-w); /* ← толщина рамки */
+    background: conic-gradient(
+      from 30deg,
+      rgba(255, 255, 255, 0.5) 0deg,
+      rgba(255, 255, 255, 0) 90deg,
+      rgba(255, 255, 255, 0.5) 180deg,
+      rgba(255, 255, 255, 0) 270deg,
+      rgba(255, 255, 255, 0.5) 360deg
+    );
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+  /* фон для карточек */
+  .bg-surface {
+    @apply bg-[#62677B]/40 rounded-3xl overflow-hidden backdrop-blur-2xl;
+    box-shadow: inset 0 0 20px 0 #ffffff00; /* кастомный инсет вне @apply */
+    --mc-border-w: 1px; /* толщина «бордера» */
+  }
+  .bg-surface::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: var(--mc-border-w); /* ← толщина рамки */
+    background: conic-gradient(
+      from 30deg,
+      rgba(255, 255, 255, 0.5) 0deg,
+      rgba(255, 255, 255, 0) 90deg,
+      rgba(255, 255, 255, 0.5) 180deg,
+      rgba(255, 255, 255, 0) 270deg,
+      rgba(255, 255, 255, 0.5) 360deg
+    );
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+  .shadowCart {
+    background-color: rgba(255, 255, 255, 0.05);
+    box-shadow: 8px -8px 15px 0px rgba(186, 187, 230, 0.205),
+      -8px 8px 15px 0px rgba(15, 13, 44, 0.349);
+  }
+
+  /* кнопка с границей-конусом из твоего sidebar-btn */
+  .sidebar-btn {
+    position: relative;
+    overflow: hidden; /* важно для скруглений */
+  }
+  .sidebar-btn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: conic-gradient(
+      from 30deg,
+      rgba(255, 255, 255, 0.5) 0deg,
+      rgba(255, 255, 255, 0.21) 90deg,
+      rgba(255, 255, 255, 0.5) 180deg,
+      rgba(255, 255, 255, 0.21) 270deg,
+      rgba(255, 255, 255, 0.5) 360deg
+    );
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  /* фоновый блок приложения */
+  .bg-app {
+    background-image: url("./assets/images/backgrounds/bg.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+}
+
+/* 4) UTILITIES — маленькие утилиты и эффекты для переиспользования */
+@layer utilities {
+  /* анимированный градиент текста */
+  @keyframes gradient-chaos {
+    0% {
+      background-position: 0% 50%;
+    }
+    20% {
+      background-position: 80% 30%;
+    }
+    40% {
+      background-position: 20% 80%;
+    }
+    60% {
+      background-position: 100% 60%;
+    }
+    80% {
+      background-position: 40% 20%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+  .gradient-chaos {
+    background: linear-gradient(270deg, #17e1b1, #9b5de5, #17e1b1);
+    background-size: 500% 500%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradient-chaos 10s ease-in-out infinite;
+  }
+
+  /* скроллбар "fade" */
+  .scrollbar-fade {
+    scrollbar-gutter: stable;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(24, 24, 24, 0.377) transparent;
+    
+    --sb-track: transparent;
+    --sb-thumb: rgba(0, 0, 0, 0.28);
+  }
+  .scrollbar-fade::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  .scrollbar-fade::-webkit-scrollbar-track {
+    background: var(--sb-track);
+  }
+  .scrollbar-fade::-webkit-scrollbar-thumb {
+    background-color: var(--sb-thumb);
+    border-radius: 9999px;
+  }
+  .scrollbar-fade:hover,
+  .scrollbar-fade:focus-within,
+  .scrollbar-fade:active {
+    --sb-track: rgba(0, 0, 0, 0.06);
+    --sb-thumb: rgba(0, 0, 0, 0.45);
+  }
+  .scrollbar-fade::-webkit-scrollbar-button {
+    display: none;
+  }
+
+  /* убрать focus ring у секторов/поверхности/контейнеров Recharts */
+  .recharts-wrapper:focus,
+  .recharts-wrapper :focus,
+  .recharts-surface:focus,
+  .recharts-surface :focus,
+  .recharts-pie-sector:focus,
+  .recharts-pie-sector:focus-visible,
+  .recharts-sector:focus,
+  .recharts-sector:focus-visible {
+    outline: none !important;
+  }
+
+  /* на всякий случай убираем возможный stroke при активном секторе */
+  .recharts-sector,
+  .recharts-pie-sector path {
+    stroke: transparent !important;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sidebar-btn {
+      transition-property: transform !important;
+      transition-duration: 500ms !important;
+      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+  }
+}
