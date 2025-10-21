@@ -33,7 +33,6 @@
 - PostgreSQL 16 (через `pg`)
 - JWT-аутентификация (`jsonwebtoken`, `bcryptjs`)
 - Рассылки для Telegram (`node-telegram-bot-api`, `telegraf`)
-- Парсинг CSV (`csv-parser`), обработка дат (Day.js, Luxon)
 - Config & tooling: `dotenv`, `dotenv-flow`, `ts-node-dev`, `cross-env`
 
 **Инфраструктура и инструменты**
@@ -132,35 +131,28 @@ docker compose up -d
 
 ---
 
-## Локальная разработка без Docker
+## Локальный запуск без Docker
 
-### Frontend
+1. **PostgreSQL**
+   - Установите PostgreSQL локально (или поднимите отдельный контейнер).
+   - Создайте базу данных и пользователя разработчика.
+   - Примените скрипты `backend/db/init/01_schema.sql` и `backend/db/init/02_seed.sql`.
 
-```bash
-cd frontend
-npm install
-npm run dev    # http://localhost:5173
-```
+2. **Переменные окружения**
+   - Backend: `cp backend/.env.example backend/.env.development`, затем укажите `PGHOST=localhost`, логин/пароль/имя базы из шага 1, `CORS_ORIGIN=http://localhost:5173`, `JWT_SECRET=...`.
+   - Frontend: `cp frontend/.env.example frontend/.env.development`, оставьте `VITE_API_URL=http://localhost:5000/api` (или задайте свой URL).
 
-Сконфигурируйте `frontend/.env.development` или используйте `VITE_API_URL` по умолчанию (`http://localhost:5000/api`).
+3. **Установка зависимостей**
+   - `cd backend && npm install`
+   - `cd frontend && npm install`
 
-### Backend
+4. **Запуск**
+   - Backend: `npm run dev` — сервис слушает `http://localhost:5000`.
+   - Frontend: `npm run dev` — интерфейс доступен на `http://localhost:5173`.
 
-```bash
-cd backend
-npm install
-cp .env.example .env.development
-npm run dev    # http://localhost:5000
-```
-
-Перед запуском убедитесь, что PostgreSQL доступен локально, или обновите `DATABASE_URL` в `.env.development`.
-
-### Сборка
-
-```bash
-cd frontend && npm run build
-cd backend && npm run build
-```
+5. **Сборка (опционально)**
+   - `cd frontend && npm run build`
+   - `cd backend && npm run build`
 
 ---
 
@@ -175,7 +167,6 @@ cd backend && npm run build
 | Backend   | `PORT`                      | Порт API (по умолчанию 5000).                            |
 | Frontend  | `VITE_API_URL`              | Базовый URL API (например, `http://localhost:5000/api`). |
 
-- Примеры смотрите в `backend/.env.example` и `frontend/.env.example`.
 
 ---
 
@@ -216,11 +207,10 @@ docker compose exec backend node utils/make-hash.js <ваш-пароль>
 
 ## API в нескольких словах
 
-- `GET /api/health/db` — проверка состояния БД.
-- `GET /api/orders`, `GET /api/orders/:id`, `POST /api/orders` — управление заказами.
-- `GET /api/reservations`, `GET /api/reservations/:id`, `POST /api/reservations` — работа с бронированиями.
-- Маршруты для чатов, рассылок, аналитики и профиля доступны в папке `backend/routes/`.
-
+- `GET /health — проверка доступности сервера и БД
+- `GET /api/orders, POST /api/orders, PUT /api/orders/:id, DELETE /api/orders/:id — управление заказами
+- `GET /api/reserves, POST /api/reserves, PUT /api/reserves/:id, DELETE /api/reserves/:id — работа с бронированиями
+- Остальные маршруты (чаты, рассылки, аналитика, события, авторизация) располагаются в backend/routes/*.routes.ts; отдельного профайл-роута нет, профиль обслуживается через auth.routes.ts.
 Полная схема API описана в соответствующих контроллерах (`backend/controllers/`) и сервисах (`backend/services/`).
 
 ---
