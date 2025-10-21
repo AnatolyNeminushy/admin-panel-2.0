@@ -102,7 +102,7 @@
 1. Установите Docker Desktop и Git.
 2. Клонируйте репозиторий:
    ```bash
-   git clone https://github.com/<ваш-аккаунт>/<ваш-репозиторий>.git
+   https://github.com/AnatolyNeminushy/admin-panel-2.0
    cd <ваш-репозиторий>
    ```
 3. Поднимите сервисы:
